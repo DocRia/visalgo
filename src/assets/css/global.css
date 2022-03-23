@@ -1,0 +1,19 @@
+html, body, #app {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.stepBar {
+  display: flex;
+  justify-content: center;
+  margin: 20px;
+}
+
+.stepButton {
+  margin: auto 30px !important;
+}
+
+.warning-row {
+  --el-table-tr-bg-color: var(--el-color-warning-lighter) !important;
+}
