@@ -30,6 +30,12 @@
                 <span>面额问题</span>
               </template>
             </el-menu-item>
+            <el-menu-item index="matrix-chain-multiplication">
+              <template #title>
+                <el-icon><files /></el-icon>
+                <span>矩阵链乘法</span>
+              </template>
+            </el-menu-item>
           </el-sub-menu>
 
           <el-sub-menu index="back-tracking">

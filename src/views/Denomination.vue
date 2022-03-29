@@ -65,7 +65,7 @@
     </el-dialog>
 
     <el-row :gutter="30" class="denoData">
-      <el-col :span="4">
+      <el-col :span="5">
         <el-table :data="denoData" border fit>
           <el-table-column prop="deno" label="面额" />
           <el-table-column label="操作">
@@ -317,7 +317,6 @@ const denoNextStep = () => {
         }
       }
     }
-    console.log(costArr)
     dpData.value.push({
       arg: step,
       cost: costArr
