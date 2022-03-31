@@ -36,6 +36,12 @@
                 <span>矩阵链乘法</span>
               </template>
             </el-menu-item>
+            <el-menu-item index="longest-common-subsequence">
+              <template #title>
+                <el-icon><files /></el-icon>
+                <span>最长公共子序列</span>
+              </template>
+            </el-menu-item>
           </el-sub-menu>
 
           <el-sub-menu index="back-tracking">

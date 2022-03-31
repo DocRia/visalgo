@@ -106,7 +106,7 @@
           fit
         >
           <el-table-column label="矩阵链相乘次数">
-            <el-table-column type="index" label="行\列" :width="60">
+            <el-table-column type="index" label="始\终" :width="60">
             </el-table-column>
             <el-table-column v-for="col in matrixColumnList" :key="col.prop" :prop="col.prop" :label="col.label">
             </el-table-column>
@@ -121,7 +121,7 @@
           fit
         >
           <el-table-column label="矩阵链分割点">
-            <el-table-column type="index" label="行\列" :width="60">
+            <el-table-column type="index" label="始\终" :width="60">
             </el-table-column>
             <el-table-column v-for="col in matrixColumnList" :key="col.prop" :prop="col.prop" :label="col.label">
             </el-table-column>
@@ -145,7 +145,8 @@ const matrixData = ref([
   { dimension: 10 },
   { dimension: 100 },
   { dimension: 5 },
-  { dimension: 50 }
+  { dimension: 50 },
+  { dimension: 15 }
 ])
 const matrixDataFull = ref([])
 const matrixDP = ref([])
@@ -221,6 +222,14 @@ const printOrder = (i, j) => {
   }
 }
 
+// const cellStyle = ({ rowIndex, columnIndex }) => {
+//   if (rowIndex < 3) {
+//     return {
+//       background: 'oldlace'
+//     }
+//   }
+// }
+
 // 步骤函数
 const matrixChainNextStep = () => {
   if (calFinished) {
@@ -267,6 +276,11 @@ const matrixChainNextStep = () => {
 }
 
 const matrixChainPrevStep = () => {
+  if (matrixChainAutoPlaySetting.value !== 0) {
+    return ElMessage.error({
+      message: '请暂停自动演示或等待演示完成'
+    })
+  }
   if (calFinished) {
     calFinished = false
   }
