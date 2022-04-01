@@ -52,7 +52,7 @@
 
     <el-row class="subsequence-container">
       <el-col>
-        <el-row class="subsequence-item-container" v-show="!isAddFinished">
+        <el-row class="subsequence-item-container" v-if="!isAddFinished">
           <el-form
             ref="subsequenceFormRef"
             label-width="120px"
@@ -79,30 +79,36 @@
           </el-form>
         </el-row>
 
-        <el-row class="subsequence-item-container">
-          <el-row>
-            <el-table
-              border
-              fit
-            >
-              <el-table-column label="" :width="70"></el-table-column>
-              <el-table-column label="" :width="70"></el-table-column>
-              <el-table-column v-for="col in strColumnList" :key="col.label" :label="col.label"></el-table-column>
-            </el-table>
-          </el-row>
+        <el-row class="subsequence-item-container subsequence-table-container" v-else>
+          <div class="full-width-container">
+            <el-row>
+              <el-table
+                class="subsequence-title-table"
+                border
+                fit
+              >
+                <el-table-column label="" :width="70"></el-table-column>
+                <el-table-column label="" :width="70"></el-table-column>
+                <el-table-column v-for="col in strColumnList" :key="col.label" :label="col.label"></el-table-column>
+              </el-table>
+            </el-row>
+          </div>
 
-          <el-row>
-            <el-table
-              :data="subsequenceDP"
-              class="subsequenceDPTable"
-              border
-              fit
-            >
-              <el-table-column type="index" label="" :index="str1IndexMethod" :width="70"></el-table-column>
-              <el-table-column type="index" label="s1\s2" :index="indexMethod" :width="70"></el-table-column>
-              <el-table-column v-for="col in subsequenceColumnList" :key="col.prop" :prop="col.prop" :label="col.label"></el-table-column>
-            </el-table>
-          </el-row>
+          <div class="full-width-container">
+            <el-row>
+              <el-table
+                :data="subsequenceDP"
+                :cell-style="cellStyle"
+                class="subsequence-dp-table"
+                border
+                fit
+              >
+                <el-table-column type="index" label="" :index="str1IndexMethod" :width="70"></el-table-column>
+                <el-table-column type="index" label="s1\s2" :index="indexMethod" :width="70"></el-table-column>
+                <el-table-column v-for="col in subsequenceColumnList" :key="col.prop" :prop="col.prop" :label="col.label"></el-table-column>
+              </el-table>
+            </el-row>
+          </div>
         </el-row>
 
         <el-row class="subsequence-item-container">
@@ -126,13 +132,22 @@ const isAddFinished = ref(false)
 const subsequenceAutoPlaySetting = ref(0)
 const subsequenceFormRef = ref(null)
 
-const subsequenceColumnList = ref([])
+const resultChar = ref('')
+const resultPositionList = ref([])
 const strColumnList = ref([])
+const subsequenceColumnList = ref([])
 const subsequenceDP = ref([])
 const subsequenceForm = reactive({
-  str1: 'bdcaba',
-  str2: 'abcbdab'
+  str1: 'bdcab',
+  str2: 'bcb'
 })
+
+let strIndex1 = 1
+let strIndex2 = 1
+let length1 = 0
+let length2 = 0
+let isCalFinished = false
+
 const indexMethod = (index) => {
   return index
 }
@@ -141,6 +156,20 @@ const str1IndexMethod = (index) => {
     return ''
   } else {
     return subsequenceForm.str1[index - 1]
+  }
+}
+const cellStyle = ({ rowIndex, columnIndex }) => {
+  for (const [r, c] of resultPositionList.value) {
+    if (r === rowIndex && c === columnIndex) {
+      return {
+        background: '#f0f9eb'
+      }
+    }
+  }
+  if (rowIndex >= 0 && columnIndex >= 2) {
+    return {
+      background: 'oldlace'
+    }
   }
 }
 const validateStr1 = (rule, value, callback) => {
@@ -167,12 +196,14 @@ const subsequenceRules = reactive({
   str1: [{ validator: validateStr1, trigger: 'blur' }],
   str2: [{ validator: validateStr2, trigger: 'blur' }]
 })
+
+// 功能函数
 const addFinish = (subsequenceFormRef) => {
   if (!subsequenceFormRef) return
   subsequenceFormRef.validate((valid) => {
     if (valid) {
-      const length1 = subsequenceForm.str1.length
-      const length2 = subsequenceForm.str2.length
+      length1 = subsequenceForm.str1.length
+      length2 = subsequenceForm.str2.length
       for (let i = 0; i <= length1; i++) {
         const arr = Array.from({ length: length2 + 1 }, () => 0)
         subsequenceDP.value.push({ ...arr })
@@ -185,25 +216,95 @@ const addFinish = (subsequenceFormRef) => {
           strColumnList.value.push({ label: subsequenceForm.str2[i - 1] })
         }
       }
-      console.log(subsequenceDP.value)
       isAddFinished.value = true
     }
   })
 }
 
 const resetSubsequence = () => {
+  if (subsequenceAutoPlaySetting.value !== 0) {
+    return ElMessage.error({
+      message: '请暂停自动演示或等待演示完成'
+    })
+  }
+  resultPositionList.value = []
+  strColumnList.value = []
   subsequenceDP.value = []
   subsequenceColumnList.value = []
+  resultChar.value = ''
+  length1 = 0
+  length2 = 0
+  strIndex1 = 1
+  strIndex2 = 1
+  isCalFinished = false
   isAddFinished.value = false
 }
 
 // 步骤函数
 const subsequenceNextStep = () => {
+  if (isCalFinished) {
+    return ElMessage.success({
+      message: `计算完成，最长公共子序列为： ${resultChar.value}`
+    })
+  }
 
+  if (strIndex2 > length2) {
+    strIndex1++
+    if (strIndex1 > length1) {
+      strIndex1--
+      let i1 = strIndex1
+      let i2 = strIndex2 - 1
+      while (i1 > 0 && i2 > 0) {
+        const currNode = subsequenceDP.value[i1][i2]
+        const upNode = subsequenceDP.value[i1 - 1][i2]
+        const leftNode = subsequenceDP.value[i1][i2 - 1]
+        if ((currNode === upNode && currNode === leftNode) || (upNode > leftNode)) {
+          i1--
+        } else if (upNode < leftNode) {
+          i2--
+        } else {
+          resultPositionList.value.push([i1, i2 + 2])
+          resultChar.value += subsequenceForm.str1[i1 - 1]
+          i1--
+          i2--
+        }
+      }
+      isCalFinished = true
+      return ElMessage.success({
+        message: `计算完成，最长公共子序列为： ${resultChar.value}`
+      })
+    }
+    strIndex2 = 1
+  }
+  const char1 = subsequenceForm.str1[strIndex1 - 1]
+  const char2 = subsequenceForm.str2[strIndex2 - 1]
+  if (char1 === char2) {
+    subsequenceDP.value[strIndex1][strIndex2] = subsequenceDP.value[strIndex1 - 1][strIndex2 - 1] + 1
+  } else {
+    subsequenceDP.value[strIndex1][strIndex2] = Math.max(subsequenceDP.value[strIndex1 - 1][strIndex2], subsequenceDP.value[strIndex1][strIndex2 - 1])
+  }
+  strIndex2++
 }
 
 const subsequencePrevStep = () => {
-
+  if (isCalFinished) {
+    resultChar.value = ''
+    resultPositionList.value = []
+    isCalFinished = false
+  }
+  if (strIndex2 === 1) {
+    if (strIndex1 === 1) {
+      return ElMessage.error({
+        message: '已经是第一步了'
+      })
+    } else {
+      strIndex2 = length2
+      strIndex1--
+    }
+  } else {
+    strIndex2--
+  }
+  subsequenceDP.value[strIndex1][strIndex2] = 0
 }
 
 const subsequenceAutoPlay = () => {
@@ -235,18 +336,24 @@ const subsequencePause = () => {
   display: flex;
   justify-content: center;
   margin-top: 20px;
+  .full-width-container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    .subsequence-dp-table {
+      /deep/ .el-table__empty-block {
+        display: none;
+      }
+    }
+    .subsequence-title-table{
+      /deep/ .el-table__empty-block {
+        display: none;
+      }
+    }
+  }
 }
 
 .top-bottom-margin {
   margin: 20px auto;
 }
-
-.subsequenceDPTable {
-  margin-bottom: 30px;
-}
-
-/deep/ .el-table__empty-block {
-  display: none;
-}
-
 </style>
