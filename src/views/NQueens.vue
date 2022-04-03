@@ -1,27 +1,54 @@
 <template>
   <div class="nqContainer">
-    <el-row class="stepBar" v-if="showBoard">
-
+    <el-row class="stepBar">
       <el-tooltip content="自动演示" placement="top">
-        <el-button size="large" type="primary" plain class="stepButton" @click="boardAutoPlay">
+        <el-button
+          size="large"
+          type="primary"
+          plain
+          class="stepButton"
+          :disabled="!showBoard"
+          @click="boardAutoPlay"
+        >
           <el-icon><video-play /></el-icon>
         </el-button>
       </el-tooltip>
 
       <el-tooltip content="暂停演示" placement="top">
-        <el-button size="large" type="primary" plain class="stepButton" @click="boardPause">
+        <el-button
+          size="large"
+          type="primary"
+          plain
+          class="stepButton"
+          :disabled="!showBoard"
+          @click="boardPause"
+        >
           <el-icon><video-pause /></el-icon>
         </el-button>
       </el-tooltip>
 
       <el-tooltip content="前进" placement="top">
-        <el-button size="large" type="primary" plain class="stepButton" @click="boardNextStep">
+        <el-button
+          size="large"
+          type="primary"
+          plain
+          class="stepButton"
+          :disabled="!showBoard"
+          @click="boardNextStep"
+        >
           <el-icon><d-arrow-right /></el-icon>
         </el-button>
       </el-tooltip>
 
       <el-tooltip content="后退" placement="top">
-        <el-button size="large" type="primary" plain class="stepButton" @click="boardPrevStep">
+        <el-button
+          size="large"
+          type="primary"
+          plain
+          class="stepButton"
+          :disabled="!showBoard"
+          @click="boardPrevStep"
+        >
           <el-icon><d-arrow-left /></el-icon>
         </el-button>
       </el-tooltip>

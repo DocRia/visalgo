@@ -8,7 +8,7 @@
     </el-header>
     <el-container>
       <!-- 侧边栏 -->
-      <el-aside width="15vw">
+      <el-aside width="200px">
         <!-- 侧边栏菜单区域 -->
         <el-menu
           active-text-color="#ffd04b"

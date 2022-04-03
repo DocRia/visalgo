@@ -1,12 +1,13 @@
 <template>
   <div class="denominationContainer">
-    <el-row class="stepBar" v-if="isAddFinished">
+    <el-row class="stepBar">
       <el-tooltip content="自动演示" placement="top">
         <el-button
           size="large"
           type="primary"
           plain
           class="stepButton"
+          :disabled="!isAddFinished"
           @click="subsequenceAutoPlay"
         >
           <el-icon><video-play /></el-icon>
@@ -19,6 +20,7 @@
           type="primary"
           plain
           class="stepButton"
+          :disabled="!isAddFinished"
           @click="subsequencePause"
         >
           <el-icon><video-pause /></el-icon>
@@ -31,6 +33,7 @@
           type="primary"
           plain
           class="stepButton"
+          :disabled="!isAddFinished"
           @click="subsequenceNextStep"
         >
           <el-icon><d-arrow-right /></el-icon>
@@ -43,6 +46,7 @@
           type="primary"
           plain
           class="stepButton"
+          :disabled="!isAddFinished"
           @click="subsequencePrevStep"
         >
           <el-icon><d-arrow-left /></el-icon>
