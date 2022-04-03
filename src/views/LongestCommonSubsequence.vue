@@ -243,6 +243,7 @@ const resetSubsequence = () => {
 // 步骤函数
 const subsequenceNextStep = () => {
   if (isCalFinished) {
+    subsequencePause()
     return ElMessage.success({
       message: `计算完成，最长公共子序列为： ${resultChar.value}`
     })
@@ -269,7 +270,9 @@ const subsequenceNextStep = () => {
           i2--
         }
       }
+      resultChar.value = resultChar.value.split('').reverse().join('')
       isCalFinished = true
+      subsequencePause()
       return ElMessage.success({
         message: `计算完成，最长公共子序列为： ${resultChar.value}`
       })
