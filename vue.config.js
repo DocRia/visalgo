@@ -12,5 +12,8 @@ module.exports = {
         resolvers: [ElementPlusResolver()]
       })
     ]
-  }
+  },
+  publicPath: process.env.NODE_ENV === 'production'
+    ? '/visalgo'
+    : '/'
 }
