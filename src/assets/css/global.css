@@ -4,13 +4,13 @@ html, body, #app {
   height: 100%;
 }
 
-.stepBar {
+.step-bar {
   display: flex;
   justify-content: center;
   margin: 20px;
 }
 
-.stepButton {
+.step-button {
   margin: auto 30px !important;
 }
 

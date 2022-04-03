@@ -1,12 +1,12 @@
 <template>
-  <div class="nqContainer">
-    <el-row class="stepBar">
+  <div class="n-queens-container-box">
+    <el-row class="step-bar">
       <el-tooltip content="自动演示" placement="top">
         <el-button
           size="large"
           type="primary"
           plain
-          class="stepButton"
+          class="step-button"
           :disabled="!showBoard"
           @click="boardAutoPlay"
         >
@@ -19,7 +19,7 @@
           size="large"
           type="primary"
           plain
-          class="stepButton"
+          class="step-button"
           :disabled="!showBoard"
           @click="boardPause"
         >
@@ -32,7 +32,7 @@
           size="large"
           type="primary"
           plain
-          class="stepButton"
+          class="step-button"
           :disabled="!showBoard"
           @click="boardNextStep"
         >
@@ -45,7 +45,7 @@
           size="large"
           type="primary"
           plain
-          class="stepButton"
+          class="step-button"
           :disabled="!showBoard"
           @click="boardPrevStep"
         >
@@ -54,8 +54,8 @@
       </el-tooltip>
     </el-row>
 
-    <div class="boardSettingContainer">
-      <el-row class="boardSetting">
+    <div class="board-setting-container">
+      <el-row class="board-setting">
         <el-row>
           <span class="demonstration">请选择棋盘大小（4-10）</span>
         </el-row>
@@ -63,8 +63,8 @@
           <div class="slider">
             <el-slider v-model="queenNum" show-input :max="10"> </el-slider>
           </div>
-          <el-button type="primary" plain class="setBoardButton" @click="setBoard" v-if="!showBoard">确认</el-button>
-          <el-button type="info" plain class="setBoardButton" @click="resetBoard" v-else>重置</el-button>
+          <el-button type="primary" plain class="set-board-button" @click="setBoard" v-if="!showBoard">确认</el-button>
+          <el-button type="info" plain class="set-board-button" @click="resetBoard" v-else>重置</el-button>
         </el-row>
       </el-row>
     </div>
@@ -308,17 +308,17 @@ const boardAutoPlay = () => {
   margin-bottom: 0;
 }
 
-.boardSettingContainer {
+.board-setting-container {
   display: flex;
   justify-content: center;
 }
-.boardSetting {
+.board-setting {
   display: flex;
   align-items: center;
   align-content: center;
   margin: 30px auto;
 }
-.setBoardButton {
+.set-board-button {
   margin-left: 20px;
 }
 

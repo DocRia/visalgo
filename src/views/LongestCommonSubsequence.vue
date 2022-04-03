@@ -1,12 +1,12 @@
 <template>
-  <div class="denominationContainer">
-    <el-row class="stepBar">
+  <div class="subsequence-container-box">
+    <el-row class="step-bar">
       <el-tooltip content="自动演示" placement="top">
         <el-button
           size="large"
           type="primary"
           plain
-          class="stepButton"
+          class="step-button"
           :disabled="!isAddFinished"
           @click="subsequenceAutoPlay"
         >
@@ -19,7 +19,7 @@
           size="large"
           type="primary"
           plain
-          class="stepButton"
+          class="step-button"
           :disabled="!isAddFinished"
           @click="subsequencePause"
         >
@@ -32,7 +32,7 @@
           size="large"
           type="primary"
           plain
-          class="stepButton"
+          class="step-button"
           :disabled="!isAddFinished"
           @click="subsequenceNextStep"
         >
@@ -45,7 +45,7 @@
           size="large"
           type="primary"
           plain
-          class="stepButton"
+          class="step-button"
           :disabled="!isAddFinished"
           @click="subsequencePrevStep"
         >

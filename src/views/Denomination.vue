@@ -1,12 +1,12 @@
 <template>
-  <div class="denominationContainer">
-    <el-row class="stepBar">
+  <div class="denomination-container-box">
+    <el-row class="step-bar">
       <el-tooltip content="自动演示" placement="top">
         <el-button
           size="large"
           type="primary"
           plain
-          class="stepButton"
+          class="step-button"
           :disabled="!isAddFinished"
           @click="denoAutoPlay"
         >
@@ -19,7 +19,7 @@
           size="large"
           type="primary"
           plain
-          class="stepButton"
+          class="step-button"
           :disabled="!isAddFinished"
           @click="denoPause"
         >
@@ -32,7 +32,7 @@
           size="large"
           type="primary"
           plain
-          class="stepButton"
+          class="step-button"
           :disabled="!isAddFinished"
           @click="denoNextStep"
         >
@@ -45,7 +45,7 @@
           size="large"
           type="primary"
           plain
-          class="stepButton"
+          class="step-button"
           :disabled="!isAddFinished"
           @click="denoPrevStep"
         >
@@ -68,7 +68,7 @@
       </template>
     </el-dialog>
 
-    <el-row :gutter="30" class="denoData">
+    <el-row :gutter="30" class="deno-data">
       <el-col :span="5">
         <el-table :data="denoData" border fit>
           <el-table-column prop="deno" label="面额" />
@@ -88,13 +88,13 @@
 
         <el-row>
           <el-input-number
-            class="topBottomMargin"
+            class="top-bottom-margin"
             v-if="!isAddFinished"
             v-model="denoNum"
             :min="1"
           />
         </el-row>
-        <el-row class="flexLineCenter">
+        <el-row class="flex-line-center">
           <el-button v-if="!isAddFinished" @click="addDeno">添加面额</el-button>
           <el-button
             type="primary"
@@ -104,7 +104,7 @@
             >完成</el-button
           >
           <el-button
-            class="topBottomMargin"
+            class="top-bottom-margin"
             v-if="isAddFinished"
             @click="resetDeno"
             >重设面额</el-button
@@ -362,19 +362,19 @@ const denoAutoPlay = () => {
 </script>
 
 <style scoped>
-.flexLineCenter {
+.flex-line-center {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.denoData {
+.deno-data {
   display: flex;
   justify-content: center;
   margin-top: 20px;
 }
 
-.topBottomMargin {
+.top-bottom-margin {
   margin: 20px auto;
 }
 </style>

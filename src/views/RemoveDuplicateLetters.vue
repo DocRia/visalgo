@@ -1,12 +1,12 @@
 <template>
   <div class="denominationContainer">
-    <el-row class="stepBar">
+    <el-row class="step-bar">
       <el-tooltip content="自动演示" placement="top">
         <el-button
           size="large"
           type="primary"
           plain
-          class="stepButton"
+          class="step-button"
           @click="letterAutoPlay"
         >
           <el-icon><video-play /></el-icon>
@@ -18,7 +18,7 @@
           size="large"
           type="primary"
           plain
-          class="stepButton"
+          class="step-button"
           @click="letterPause"
         >
           <el-icon><video-pause /></el-icon>
@@ -30,7 +30,7 @@
           size="large"
           type="primary"
           plain
-          class="stepButton"
+          class="step-button"
           @click="letterNextStep"
         >
           <el-icon><d-arrow-right /></el-icon>
@@ -42,7 +42,7 @@
           size="large"
           type="primary"
           plain
-          class="stepButton"
+          class="step-button"
           @click="letterPrevStep"
         >
           <el-icon><d-arrow-left /></el-icon>
@@ -56,7 +56,7 @@
           >Using attributes</span
         >
         <el-input v-model="str" clearable />
-        <el-row class="flexLineCenter">
+        <el-row class="flex-line-center">
           <el-button v-if="!isAddFinished" @click="addDeno">添加面额</el-button>
           <el-button
             type="primary"

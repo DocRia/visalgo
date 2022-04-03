@@ -1,12 +1,12 @@
 <template>
-  <div class="denominationContainer">
-    <el-row class="stepBar">
+  <div class="matrix-chain-container-box">
+    <el-row class="step-bar">
       <el-tooltip content="自动演示" placement="top">
         <el-button
           size="large"
           type="primary"
           plain
-          class="stepButton"
+          class="step-button"
           :disabled="!isAddFinished"
           @click="matrixChainAutoPlay"
         >
@@ -19,7 +19,7 @@
           size="large"
           type="primary"
           plain
-          class="stepButton"
+          class="step-button"
           :disabled="!isAddFinished"
           @click="matrixChainPause"
         >
@@ -32,7 +32,7 @@
           size="large"
           type="primary"
           plain
-          class="stepButton"
+          class="step-button"
           :disabled="!isAddFinished"
           @click="matrixChainNextStep"
         >
@@ -45,7 +45,7 @@
           size="large"
           type="primary"
           plain
-          class="stepButton"
+          class="step-button"
           :disabled="!isAddFinished"
           @click="matrixChainPrevStep"
         >
@@ -54,7 +54,7 @@
       </el-tooltip>
     </el-row>
 
-    <el-row :gutter="30" class="matrix-container">
+    <el-row :gutter="30" class="matrix-chain-container">
       <el-col :span="5">
         <el-table :data="matrixData" v-if="!isAddFinished" border fit>
           <el-table-column prop="dimension" label="维度" />
@@ -104,7 +104,7 @@
       <el-col :span="tableSpan" v-if="isAddFinished">
         <el-table
           :data="matrixDP"
-          class="matrixDPTable"
+          class="matrix-dp-table"
           stripe
           border
           fit
@@ -329,7 +329,7 @@ const matrixChainPause = () => {
   align-items: center;
 }
 
-.matrix-container {
+.matrix-chain-container {
   display: flex;
   justify-content: center;
   margin-top: 20px;
@@ -339,7 +339,7 @@ const matrixChainPause = () => {
   margin: 20px auto;
 }
 
-.matrixDPTable {
+.matrix-dp-table {
   margin-bottom: 30px;
 }
 
