@@ -348,12 +348,12 @@ const subsequencePause = () => {
     display: flex;
     justify-content: center;
     .subsequence-dp-table {
-      /deep/ .el-table__empty-block {
+      :deep(.el-table__empty-block) {
         display: none;
       }
     }
     .subsequence-title-table{
-      /deep/ .el-table__empty-block {
+      :deep(.el-table__empty-block) {
         display: none;
       }
     }
