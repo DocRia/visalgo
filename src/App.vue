@@ -42,6 +42,12 @@
                 <span>最长公共子序列</span>
               </template>
             </el-menu-item>
+            <el-menu-item index="knapsack-problem">
+              <template #title>
+                <el-icon><files /></el-icon>
+                <span>01背包问题</span>
+              </template>
+            </el-menu-item>
           </el-sub-menu>
 
           <el-sub-menu index="back-tracking">

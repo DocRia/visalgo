@@ -38,6 +38,14 @@ const routes = [
     component: () => import(/* webpackChunkName: "dynamicProgramming" */ '../views/LongestCommonSubsequence.vue')
   },
   {
+    path: '/knapsack-problem',
+    name: 'KnapsackProblem',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "dynamicProgramming" */ '../views/KnapsackProblem.vue')
+  },
+  {
     path: '/remove-duplicate-letters',
     name: 'RemoveDuplicateLetters',
     // route level code-splitting
