@@ -101,36 +101,38 @@
         </el-row>
       </el-col>
 
-      <el-col :span="tableSpan" v-if="isAddFinished">
-        <el-table
-          :data="matrixDP"
-          class="matrix-dp-table"
-          stripe
-          border
-          fit
-        >
-          <el-table-column label="矩阵链相乘次数">
-            <el-table-column type="index" label="始\终" :width="60">
+      <el-col :span="tableSpan">
+        <el-row v-if="isAddFinished">
+          <el-table
+            :data="matrixDP"
+            class="matrix-dp-table"
+            stripe
+            border
+            fit
+          >
+            <el-table-column label="矩阵链相乘次数">
+              <el-table-column type="index" label="始\终" :width="60">
+              </el-table-column>
+              <el-table-column v-for="col in matrixColumnList" :key="col.prop" :prop="col.prop" :label="col.label">
+              </el-table-column>
             </el-table-column>
-            <el-table-column v-for="col in matrixColumnList" :key="col.prop" :prop="col.prop" :label="col.label">
-            </el-table-column>
-          </el-table-column>
-        </el-table>
+          </el-table>
 
-        <el-table
-          :data="matrixBreakDP"
-          class="matrixBreakDPTable"
-          stripe
-          border
-          fit
-        >
-          <el-table-column label="矩阵链分割点">
-            <el-table-column type="index" label="始\终" :width="60">
+          <el-table
+            :data="matrixBreakDP"
+            class="matrixBreakDPTable"
+            stripe
+            border
+            fit
+          >
+            <el-table-column label="矩阵链分割点">
+              <el-table-column type="index" label="始\终" :width="60">
+              </el-table-column>
+              <el-table-column v-for="col in matrixColumnList" :key="col.prop" :prop="col.prop" :label="col.label">
+              </el-table-column>
             </el-table-column>
-            <el-table-column v-for="col in matrixColumnList" :key="col.prop" :prop="col.prop" :label="col.label">
-            </el-table-column>
-          </el-table-column>
-        </el-table>
+          </el-table>
+        </el-row>
       </el-col>
     </el-row>
   </div>
