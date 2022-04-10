@@ -54,38 +54,35 @@
       </el-tooltip>
     </el-row>
 
-    <el-dialog v-model="dialogVisible" title="请输入总金额：">
-      <el-form :model="dialogForm" label-position="top">
-        <el-form-item>
-          <el-input v-model="dialogForm.amount"></el-input>
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="cancelAmount">取消</el-button>
-          <el-button type="primary" @click="setAmount">确认</el-button>
-        </span>
-      </template>
-    </el-dialog>
-
     <el-row :gutter="30" class="deno-data">
-      <el-col :span="5">
-        <el-table :data="denoData" border fit>
-          <el-table-column prop="deno" label="面额" />
-          <el-table-column label="操作">
-            <template #default="scope">
-              <el-button
-                type="text"
-                size="small"
-                v-show="!isAddFinished"
-                @click.prevent="deleteDeno(scope.$index)"
-              >
-                删除
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-
+      <el-col :span="6">
+        <el-row>
+          <div class="top-bottom-margin">
+            总金额：
+            <el-input-number
+              v-model="denoAmount"
+              :min="1"
+              :disabled="isAddFinished"
+            />
+          </div>
+        </el-row>
+        <el-row>
+          <el-table :data="denoData" border fit>
+            <el-table-column prop="deno" label="面额" />
+            <el-table-column label="操作">
+              <template #default="scope">
+                <el-button
+                  type="text"
+                  size="small"
+                  v-show="!isAddFinished"
+                  @click.prevent="deleteDeno(scope.$index)"
+                >
+                  删除
+                </el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-row>
         <el-row>
           <el-input-number
             class="top-bottom-margin"
@@ -100,7 +97,7 @@
             type="primary"
             plain
             v-if="!isAddFinished"
-            @click="showDialog"
+            @click="addFinish"
             >完成</el-button
           >
           <el-button
@@ -109,21 +106,18 @@
             @click="resetDeno"
             >重设面额</el-button
           >
-          <el-check-tag type="info" size="large" v-if="isAddFinished" @click="resetAmount">
-            {{ `设置的总金额为：${dialogForm.amount}` }}
-          </el-check-tag>
         </el-row>
       </el-col>
 
-      <el-col :span="5" v-show="isAddFinished">
-        <el-table :data="denoData" :row-class-name="funcClassName" border fit>
+      <el-col :span="5">
+        <el-table :data="denoData" :row-class-name="funcClassName"  v-show="isAddFinished" border fit>
           <el-table-column prop="func" label="状态转移方程F(x)=min:" />
           <el-table-column prop="funcResult" label="对应函数" />
         </el-table>
       </el-col>
 
-      <el-col :span="8" v-show="isAddFinished">
-        <el-scrollbar max-height="550px">
+      <el-col :span="8">
+        <el-scrollbar max-height="550px" v-show="isAddFinished">
           <el-table
             :row-class-name="dpClassName"
             :data="dpData"
@@ -141,15 +135,15 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import 'element-plus/theme-chalk/el-message.css'
 
 const isAddFinished = ref(false)
 const denoAutoPlaySetting = ref(0)
-const dialogVisible = ref(false)
 const calFinished = ref(false)
 const denoNum = ref(1)
+const denoAmount = ref(25)
 const denoData = ref([
   {
     deno: 1,
@@ -178,12 +172,8 @@ const dpData = ref([
 ])
 const dpDataBuffer = ref([])
 
-const dialogForm = reactive({
-  amount: ''
-})
-
 // UI函数
-const showDialog = () => {
+const addFinish = () => {
   if (denoData.value.length < 3) {
     return ElMessage.error({
       message: '请至少添加三种面额'
@@ -193,7 +183,8 @@ const showDialog = () => {
       message: '必须设置一元面额'
     })
   } else {
-    dialogVisible.value = true
+    denoAmount.value = Number.parseInt(denoAmount.value)
+    isAddFinished.value = true
   }
 }
 
@@ -240,38 +231,6 @@ const setFuncResult = () => {
     } else {
       i.funcResult = ''
     }
-  }
-}
-
-const resetAmount = () => {
-  if (denoAutoPlaySetting.value !== 0) {
-    return ElMessage.error({
-      message: '请暂停自动演示或等待演示完成'
-    })
-  }
-  dpData.value = [
-    { arg: 0, cost: [] }
-  ]
-  dpDataBuffer.value = []
-  calFinished.value = false
-  setFuncResult()
-  showDialog()
-}
-
-const cancelAmount = () => {
-  dialogVisible.value = false
-}
-
-const setAmount = () => {
-  const amountReg = /^[1-9]\d*$/
-  if (!amountReg.test(dialogForm.amount)) {
-    return ElMessage.error({
-      message: '请输入正确的金额'
-    })
-  } else {
-    dialogForm.amount = Number.parseInt(dialogForm.amount)
-    dialogVisible.value = false
-    isAddFinished.value = true
   }
 }
 
@@ -327,7 +286,7 @@ const denoNextStep = () => {
     })
   }
 
-  if (step === dialogForm.amount) {
+  if (step === denoAmount.value) {
     calFinished.value = true
   }
   setFuncResult()

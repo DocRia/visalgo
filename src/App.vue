@@ -30,6 +30,12 @@
                 <span>面额问题</span>
               </template>
             </el-menu-item>
+            <el-menu-item index="knapsack-problem">
+              <template #title>
+                <el-icon><files /></el-icon>
+                <span>01背包问题</span>
+              </template>
+            </el-menu-item>
             <el-menu-item index="matrix-chain-multiplication">
               <template #title>
                 <el-icon><files /></el-icon>
@@ -40,12 +46,6 @@
               <template #title>
                 <el-icon><files /></el-icon>
                 <span>最长公共子序列</span>
-              </template>
-            </el-menu-item>
-            <el-menu-item index="knapsack-problem">
-              <template #title>
-                <el-icon><files /></el-icon>
-                <span>01背包问题</span>
               </template>
             </el-menu-item>
           </el-sub-menu>
