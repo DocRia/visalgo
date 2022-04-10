@@ -84,7 +84,7 @@
           </el-table-column>
         </el-table>
 
-        <el-row>
+        <el-row v-if="!isAddFinished">
           <div class="top-bottom-margin">
             重量：
             <el-input-number
@@ -93,7 +93,7 @@
             />
           </div>
         </el-row>
-        <el-row>
+        <el-row v-if="!isAddFinished">
           <div class="bottom-margin">
             价值：
             <el-input-number
@@ -103,7 +103,11 @@
           </div>
         </el-row>
         <el-row class="flex-line-center">
-          <el-button v-if="!isAddFinished" @click="addKnapsackItem">添加物品</el-button>
+          <el-button
+            v-if="!isAddFinished"
+            @click="addKnapsackItem"
+            >添加物品</el-button
+          >
           <el-button
             type="primary"
             plain
@@ -112,6 +116,7 @@
             >完成</el-button
           >
           <el-button
+            class="top-bottom-margin"
             v-if="isAddFinished"
             @click="resetKnapsack"
             >重设背包</el-button
@@ -122,13 +127,30 @@
       <el-col :span="22 - knapsackSpan">
         <el-row class="knapsack-table-container">
           <el-table
-            :data="knapsackDP"
+            :data="knapsackValueDP"
             class="knapsack-dp-table"
+            v-if="isAddFinished"
             border
             fit
           >
-            <el-table-column type="index" label="物品\承重" :width="90"></el-table-column>
-            <el-table-column v-for="col in knapsackColumnList" :key="col.prop" :prop="col.prop" :label="col.label"></el-table-column>
+            <el-table-column label="背包价值">
+              <el-table-column type="index" label="物品\承重" :width="90"></el-table-column>
+              <el-table-column v-for="col in knapsackColumnList" :key="col.prop" :prop="col.prop" :label="col.label"></el-table-column>
+            </el-table-column>
+          </el-table>
+        </el-row>
+        <el-row class="knapsack-table-container">
+          <el-table
+            :data="knapsackItemDP"
+            class="knapsack-dp-table"
+            v-if="isAddFinished"
+            border
+            fit
+          >
+            <el-table-column label="背包物品">
+              <el-table-column type="index" label="物品\承重" :width="90"></el-table-column>
+              <el-table-column v-for="col in knapsackColumnList" :key="col.prop" :prop="col.prop" :label="col.label"></el-table-column>
+            </el-table-column>
           </el-table>
         </el-row>
       </el-col>
@@ -148,6 +170,10 @@ const knapsackCapacity = ref(4)
 const knapsackWeight = ref(1)
 const knapsackValue = ref(1)
 
+const itemIndex = ref(1)
+const weightIndex = ref(1)
+let calFinished = false
+
 const knapsackItemsData = ref([
   {
     weight: 1,
@@ -164,7 +190,8 @@ const knapsackItemsData = ref([
 ])
 const knapsackSpan = computed(() => isAddFinished.value ? 6 : 7)
 const knapsackColumnList = ref([])
-const knapsackDP = ref([])
+const knapsackValueDP = ref([])
+const knapsackItemDP = ref([])
 
 const deleteKnapsackItem = (index) => {
   knapsackItemsData.value.splice(index, 1)
@@ -188,10 +215,17 @@ const addFinish = () => {
     knapsackCapacity.value = Number.parseInt(knapsackCapacity.value)
     for (let i = 0; i < knapsackItemsData.value.length; i++) {
       const arr = Array.from({ length: knapsackCapacity.value + 1 }, () => 0)
-      knapsackDP.value.push({ ...arr })
+      knapsackValueDP.value.push({ ...arr })
+      knapsackItemDP.value.push({
+        ...arr.map((item) => { return `${item}` })
+      })
     }
     for (let i = 0; i <= knapsackCapacity.value; i++) {
       knapsackColumnList.value.push({ prop: `${i}`, label: `${i}` })
+    }
+    for (let i = knapsackItemsData.value[0].weight; i <= knapsackCapacity.value; i++) {
+      knapsackValueDP.value[0][i] = knapsackItemsData.value[0].value
+      knapsackItemDP.value[0][i] = '1'
     }
     isAddFinished.value = true
   }
@@ -203,62 +237,74 @@ const resetKnapsack = () => {
       message: '请暂停自动演示或等待演示完成'
     })
   }
+  calFinished = false
+  itemIndex.value = 1
+  weightIndex.value = 1
   knapsackColumnList.value = []
-  knapsackDP.value = []
+  knapsackValueDP.value = []
+  knapsackItemDP.value = []
   isAddFinished.value = false
 }
 
 // 步骤函数
 const knapsackNextStep = () => {
-//   if (isCalFinished) {
-//     knapsackPause()
-//     return ElMessage.success({
-//       message: `计算完成，最长公共子序列为： ${resultChar.value}`
-//     })
-//   }
-
-//   if (strIndex2 > length2) {
-//     strIndex1++
-//     if (strIndex1 > length1) {
-//       strIndex1--
-//       let i1 = strIndex1
-//       let i2 = strIndex2 - 1
-//       while (i1 > 0 && i2 > 0) {
-//         const currNode = knapsackDP.value[i1][i2]
-//         const upNode = knapsackDP.value[i1 - 1][i2]
-//         const leftNode = knapsackDP.value[i1][i2 - 1]
-//         if ((currNode === upNode && currNode === leftNode) || (upNode > leftNode)) {
-//           i1--
-//         } else if (upNode < leftNode) {
-//           i2--
-//         } else {
-//           resultPositionList.value.push([i1, i2 + 2])
-//           resultChar.value += knapsackForm.str1[i1 - 1]
-//           i1--
-//           i2--
-//         }
-//       }
-//       resultChar.value = resultChar.value.split('').reverse().join('')
-//       isCalFinished = true
-//       knapsackPause()
-//       return ElMessage.success({
-//         message: `计算完成，最长公共子序列为： ${resultChar.value}`
-//       })
-//     }
-//     strIndex2 = 1
-//   }
-//   const char1 = knapsackForm.str1[strIndex1 - 1]
-//   const char2 = knapsackForm.str2[strIndex2 - 1]
-//   if (char1 === char2) {
-//     knapsackDP.value[strIndex1][strIndex2] = knapsackDP.value[strIndex1 - 1][strIndex2 - 1] + 1
-//   } else {
-//     knapsackDP.value[strIndex1][strIndex2] = Math.max(knapsackDP.value[strIndex1 - 1][strIndex2], knapsackDP.value[strIndex1][strIndex2 - 1])
-//   }
-//   strIndex2++
+  if (calFinished) {
+    knapsackPause()
+    return ElMessage.success({
+      message: `计算完成，背包放入物品为：${knapsackItemDP.value[itemIndex.value - 1][knapsackCapacity.value]}，总价值为：${knapsackValueDP.value[itemIndex.value - 1][knapsackCapacity.value]}`
+    })
+  }
+  if (weightIndex.value > knapsackCapacity.value) {
+    weightIndex.value = 1
+    itemIndex.value++
+  }
+  if (itemIndex.value === knapsackItemsData.value.length) {
+    calFinished = true
+    knapsackPause()
+    return ElMessage.success({
+      message: `计算完成，背包放入物品为：${knapsackItemDP.value[itemIndex.value - 1][knapsackCapacity.value]}，总价值为：${knapsackValueDP.value[itemIndex.value - 1][knapsackCapacity.value]}`
+    })
+  }
+  if (weightIndex.value < knapsackItemsData.value[itemIndex.value].weight) {
+    knapsackValueDP.value[itemIndex.value][weightIndex.value] = knapsackValueDP.value[itemIndex.value - 1][weightIndex.value]
+    knapsackItemDP.value[itemIndex.value][weightIndex.value] = knapsackItemDP.value[itemIndex.value - 1][weightIndex.value]
+  } else {
+    const value1 = knapsackValueDP.value[itemIndex.value - 1][weightIndex.value]
+    const value2 = knapsackValueDP.value[itemIndex.value - 1][weightIndex.value - knapsackItemsData.value[itemIndex.value].weight] + knapsackItemsData.value[itemIndex.value].value
+    if (value1 > value2) {
+      knapsackValueDP.value[itemIndex.value][weightIndex.value] = value1
+      knapsackItemDP.value[itemIndex.value][weightIndex.value] = knapsackItemDP.value[itemIndex.value - 1][weightIndex.value]
+    } else {
+      knapsackValueDP.value[itemIndex.value][weightIndex.value] = value2
+      const prevItem = knapsackItemDP.value[itemIndex.value - 1][weightIndex.value - knapsackItemsData.value[itemIndex.value].weight]
+      if (prevItem === '0') {
+        knapsackItemDP.value[itemIndex.value][weightIndex.value] = `${itemIndex.value + 1}`
+      } else {
+        knapsackItemDP.value[itemIndex.value][weightIndex.value] = prevItem + ` , ${itemIndex.value + 1}`
+      }
+    }
+  }
+  weightIndex.value++
 }
 
 const knapsackPrevStep = () => {
-
+  if (calFinished) {
+    calFinished = false
+  }
+  weightIndex.value--
+  if (weightIndex.value === 0) {
+    itemIndex.value--
+    if (itemIndex.value === 0) {
+      itemIndex.value = 1
+      weightIndex.value = 1
+      return ElMessage.error({
+        message: '已经是第一步了'
+      })
+    }
+    weightIndex.value = knapsackCapacity.value
+  }
+  knapsackItemDP.value[itemIndex.value][weightIndex.value] = '0'
+  knapsackValueDP.value[itemIndex.value][weightIndex.value] = 0
 }
 
 const knapsackAutoPlay = () => {
