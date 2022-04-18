@@ -68,6 +68,12 @@
               <el-icon><collection /></el-icon>
               <span>贪心法</span>
             </template>
+            <el-menu-item index="activity-selection">
+              <template #title>
+                <el-icon><files /></el-icon>
+                <span>活动安排问题</span>
+              </template>
+            </el-menu-item>
             <el-menu-item index="remove-duplicate-letters">
               <template #title>
                 <el-icon><files /></el-icon>

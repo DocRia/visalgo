@@ -2,10 +2,6 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 
 const routes = [
   {
-    path: '/',
-    redirect: '/denomination'
-  },
-  {
     path: '/nqueens',
     name: 'NQueens',
     // route level code-splitting
@@ -52,6 +48,18 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "greedy" */ '../views/RemoveDuplicateLetters.vue')
+  },
+  {
+    path: '/activity-selection',
+    name: 'ActivitySelection',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "greedy" */ '../views/ActivitySelection.vue')
+  },
+  {
+    path: '/',
+    redirect: '/activity-selection'
   }
 ]
 
