@@ -74,12 +74,6 @@
                 <span>活动安排问题</span>
               </template>
             </el-menu-item>
-            <el-menu-item index="remove-duplicate-letters">
-              <template #title>
-                <el-icon><files /></el-icon>
-                <span>字符串去重</span>
-              </template>
-            </el-menu-item>
           </el-sub-menu>
 
         </el-menu>
