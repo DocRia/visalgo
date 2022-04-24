@@ -71,7 +71,7 @@
 
     <div class="board">
       <board v-if="showBoard"></board>
-      <el-tag type="warning" size="large" v-if="$store.state.isBackTracking">
+      <el-tag type="warning" size="large" v-if="isBackTracking">
         <el-icon><info-filled /></el-icon>
         开始回溯
       </el-tag>
@@ -87,8 +87,15 @@ import { ElMessage } from 'element-plus'
 import 'element-plus/theme-chalk/el-message.css'
 import board from '../components/Board.vue'
 
+const isCalFinished = ref(false)
+const isBackTracking = ref(false)
+const boardMaxCount = ref(0)
+const boardCurrCount = ref(0)
+const backTrackingPosition = ref(0)
+const nqAutoPlaySetting = ref(0)
 const queenNum = ref(4)
 const showBoard = ref(false)
+const boardState = ref([])
 const store = useStore()
 
 const setBoard = () => {
@@ -98,19 +105,30 @@ const setBoard = () => {
     })
   } else {
     store.commit('boardInit', queenNum.value)
+    boardState.value = [Array.from({ length: queenNum.value }, () => -1)]
     showBoard.value = true
   }
 }
 
 const resetBoard = () => {
+  isBackTracking.value = false
+  isCalFinished.value = false
+  boardMaxCount.value = 0
+  boardCurrCount.value = 0
+  backTrackingPosition.value = 0
+  boardState.value = []
   showBoard.value = false
 }
 
 const redrawBoard = () => {
-  const currBoardState = store.state.boardState[store.state.boardCurrCount]
+  const currBoardState = boardState.value[boardCurrCount.value]
   for (let i = 0; i < queenNum.value; i++) {
     for (let j = 0; j < queenNum.value; j++) {
-      store.state.boardData[i][j] = 0
+      store.commit('boardDataChange', {
+        row: i,
+        col: j,
+        value: 0
+      })
     }
   }
   for (let i = 0; i < queenNum.value; i++) {
@@ -119,17 +137,29 @@ const redrawBoard = () => {
       let col = i
       // 行列
       for (let k = 0; k < queenNum.value; k++) {
-        store.state.boardData[row][k] = 1
+        store.commit('boardDataChange', {
+          row: row,
+          col: k,
+          value: 1
+        })
       }
       for (let k = 0; k < queenNum.value; k++) {
-        store.state.boardData[k][col] = 1
+        store.commit('boardDataChange', {
+          row: k,
+          col: col,
+          value: 1
+        })
       }
       // 左上
       while (true) {
         row--
         col--
         if (row >= 0 && col >= 0) {
-          store.state.boardData[row][col] = 1
+          store.commit('boardDataChange', {
+            row: row,
+            col: col,
+            value: 1
+          })
         } else {
           break
         }
@@ -141,7 +171,11 @@ const redrawBoard = () => {
         row--
         col++
         if (row >= 0 && col < queenNum.value) {
-          store.state.boardData[row][col] = 1
+          store.commit('boardDataChange', {
+            row: row,
+            col: col,
+            value: 1
+          })
         } else {
           break
         }
@@ -153,7 +187,11 @@ const redrawBoard = () => {
         row++
         col--
         if (row < queenNum.value && col >= 0) {
-          store.state.boardData[row][col] = 1
+          store.commit('boardDataChange', {
+            row: row,
+            col: col,
+            value: 1
+          })
         } else {
           break
         }
@@ -165,12 +203,20 @@ const redrawBoard = () => {
         row++
         col++
         if (row < queenNum.value && col < queenNum.value) {
-          store.state.boardData[row][col] = 1
+          store.commit('boardDataChange', {
+            row: row,
+            col: col,
+            value: 1
+          })
         } else {
           break
         }
       }
-      store.state.boardData[currBoardState[i]][i] = 2
+      store.commit('boardDataChange', {
+        row: currBoardState[i],
+        col: i,
+        value: 2
+      })
     } else {
       break
     }
@@ -178,8 +224,8 @@ const redrawBoard = () => {
 }
 
 const boardPrevStep = () => {
-  if (store.state.boardCurrCount > 0) {
-    store.state.boardCurrCount--
+  if (boardCurrCount.value > 0) {
+    boardCurrCount.value--
     redrawBoard()
   } else {
     ElMessage.warning({
@@ -190,28 +236,28 @@ const boardPrevStep = () => {
 
 const boardNextStep = () => {
   // 判断是否有返回上一步的操作
-  if (store.state.boardCurrCount < store.state.boardMaxCount) {
-    store.state.boardCurrCount++
+  if (boardCurrCount.value < boardMaxCount.value) {
+    boardCurrCount.value++
   } else {
-    if (store.state.isFinished) {
+    if (isCalFinished.value) {
       boardPause()
       return ElMessage.success({
         message: '已经是最后一步了'
       })
     }
     // 获取当前棋盘状态
-    const currBoardState = [...store.state.boardState[store.state.boardCurrCount]]
+    const currBoardState = [...boardState.value[boardCurrCount.value]]
     // 判断是否处于回溯状态
-    if (store.state.isBackTracking) {
+    if (isBackTracking.value) {
       for (let i = 0; i < queenNum.value; i++) {
         if (currBoardState[i] === -1) {
           // 从上一个位置开始遍历
-          let j = store.state.backTrackingPosition + 1
+          let j = backTrackingPosition.value + 1
           while (j < queenNum.value) {
             // 如果回溯列有空位，则退出回溯状态
             if (store.state.boardData[j][i] === 0) {
               currBoardState[i] = j
-              store.state.isBackTracking = false
+              isBackTracking.value = false
               break
             }
             j++
@@ -222,15 +268,15 @@ const boardNextStep = () => {
             while (currBoardState[count] === -1) {
               count--
             }
-            store.state.backTrackingPosition = currBoardState[count]
+            backTrackingPosition.value = currBoardState[count]
             currBoardState[count] = -1
           }
           break
         }
       }
-      store.state.boardMaxCount++
-      store.state.boardCurrCount = store.state.boardMaxCount
-      store.state.boardState.push(currBoardState)
+      boardMaxCount.value++
+      boardCurrCount.value = boardMaxCount.value
+      boardState.value.push(currBoardState)
     } else {
       for (let i = 0; i < queenNum.value; i++) {
         if (currBoardState[i] === -1) {
@@ -244,45 +290,45 @@ const boardNextStep = () => {
           }
           // 如果下一列没有可以放置的位置，则进入回溯状态
           if (j === queenNum.value) {
-            store.state.isBackTracking = true
+            isBackTracking.value = true
           }
           break
         }
       }
       // 如果进入回溯状态，则退回一列，获取该列的行号 backTrackingPosition
-      if (store.state.isBackTracking) {
+      if (isBackTracking.value) {
         let count = queenNum.value - 1
         while (currBoardState[count] === -1) {
           count--
         }
-        store.state.backTrackingPosition = currBoardState[count]
+        backTrackingPosition.value = currBoardState[count]
         currBoardState[count] = -1
       }
-      store.state.boardMaxCount++
-      store.state.boardCurrCount = store.state.boardMaxCount
-      store.state.boardState.push(currBoardState)
+      boardMaxCount.value++
+      boardCurrCount.value = boardMaxCount.value
+      boardState.value.push(currBoardState)
     }
     if (currBoardState[currBoardState.length - 1] !== -1) {
-      store.state.isFinished = true
+      isCalFinished.value = true
     }
   }
   redrawBoard()
 }
 
 const boardPause = () => {
-  if (store.state.autoPlaySetting !== 0) {
-    clearInterval(store.state.autoPlaySetting)
-    store.state.autoPlaySetting = 0
+  if (nqAutoPlaySetting.value !== 0) {
+    clearInterval(nqAutoPlaySetting.value)
+    nqAutoPlaySetting.value = 0
   }
 }
 
 const boardAutoPlay = () => {
-  if (store.state.autoPlaySetting !== 0) {
+  if (nqAutoPlaySetting.value !== 0) {
     return ElMessage.warning({
       message: '正在自动演示'
     })
   }
-  store.state.autoPlaySetting = setInterval(boardNextStep, 1000)
+  nqAutoPlaySetting.value = setInterval(boardNextStep, 1000)
 }
 
 </script>
