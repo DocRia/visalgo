@@ -76,6 +76,18 @@
             </el-menu-item>
           </el-sub-menu>
 
+          <el-sub-menu index="divide-and-conquer">
+            <template #title>
+              <el-icon><collection /></el-icon>
+              <span>分治法</span>
+            </template>
+            <el-menu-item index="chess-board-cover">
+              <template #title>
+                <el-icon><files /></el-icon>
+                <span>棋盘覆盖问题</span>
+              </template>
+            </el-menu-item>
+          </el-sub-menu>
         </el-menu>
       </el-aside>
       <!-- 右侧内容主题 -->

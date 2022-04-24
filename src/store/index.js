@@ -36,6 +36,9 @@ export default createStore({
       state.boardCurrCount = 0
       state.boardData = []
       state.boardState = []
+    },
+    boardDataChange (state, changeConfig) {
+      state.boardData[changeConfig.row][changeConfig.col] = changeConfig.value
     }
   },
   actions: {

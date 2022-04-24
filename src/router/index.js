@@ -50,8 +50,16 @@ const routes = [
     component: () => import(/* webpackChunkName: "greedy" */ '../views/ActivitySelection.vue')
   },
   {
+    path: '/chess-board-cover',
+    name: 'ChessBoardCover',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "divideAndConquer" */ '../views/ChessBoardCover.vue')
+  },
+  {
     path: '/',
-    redirect: '/activity-selection'
+    redirect: '/chess-board-cover'
   }
 ]
 
