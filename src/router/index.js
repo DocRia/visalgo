@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
+import store from '../store/index.js'
 
 const routes = [
   {
@@ -67,13 +68,34 @@ const routes = [
   },
   {
     path: '/',
-    redirect: '/horse-racing'
+    redirect: '/nqueens'
   }
 ]
 
 const router = createRouter({
   history: createWebHashHistory(),
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.name === 'NQueens') {
+    store.commit('headerTitleChange', 'N皇后问题')
+  } else if (to.name === 'Denomination') {
+    store.commit('headerTitleChange', '面额问题')
+  } else if (to.name === 'KnapsackProblem') {
+    store.commit('headerTitleChange', '01背包问题')
+  } else if (to.name === 'MatrixChainMultiplication') {
+    store.commit('headerTitleChange', '矩阵链乘法')
+  } else if (to.name === 'LongestCommonSubsequence') {
+    store.commit('headerTitleChange', '最长公共子序列')
+  } else if (to.name === 'ActivitySelection') {
+    store.commit('headerTitleChange', '活动安排问题')
+  } else if (to.name === 'HorseRacing') {
+    store.commit('headerTitleChange', '田忌赛马')
+  } else if (to.name === 'ChessBoardCover') {
+    store.commit('headerTitleChange', '棋盘覆盖问题')
+  }
+  next()
 })
 
 export default router

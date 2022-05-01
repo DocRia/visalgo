@@ -1,9 +1,9 @@
 <template>
   <el-container class="home-container">
     <!-- 头部区域 -->
-    <el-header>
+    <el-header class="home-title">
       <div>
-        <span>Visalgo</span>
+        <span>{{ $store.state.headerTitle }}</span>
       </div>
     </el-header>
     <el-container>
@@ -117,6 +117,10 @@ img {
 
 .home-container {
   height: 100%;
+  .home-title {
+    display: flex;
+    justify-content: center;
+  }
 }
 .el-header {
   display: flex;

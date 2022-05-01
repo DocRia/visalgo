@@ -2,6 +2,7 @@ import { createStore } from 'vuex'
 
 export default createStore({
   state: {
+    headerTitle: '',
     boardSize: 4,
     boardData: []
   },
@@ -18,6 +19,9 @@ export default createStore({
     },
     boardDataChange (state, changeConfig) {
       state.boardData[changeConfig.row][changeConfig.col] = changeConfig.value
+    },
+    headerTitleChange (state, title) {
+      state.headerTitle = title
     }
   },
   actions: {
