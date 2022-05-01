@@ -111,6 +111,11 @@ const setBoard = () => {
 }
 
 const resetBoard = () => {
+  if (nqAutoPlaySetting.value !== 0) {
+    return ElMessage.error({
+      message: '请暂停自动演示或等待演示完成'
+    })
+  }
   isBackTracking.value = false
   isCalFinished.value = false
   boardMaxCount.value = 0

@@ -173,6 +173,11 @@ const setBoard = () => {
 }
 
 const resetBoard = () => {
+  if (chessAutoPlaySetting.value !== 0) {
+    return ElMessage.error({
+      message: '请暂停自动演示或等待演示完成'
+    })
+  }
   boardTree.value = []
   coverPieces.value = []
   coverPiecesBuffer.value = []

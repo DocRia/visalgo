@@ -192,6 +192,11 @@ const addActivity = () => {
 }
 
 const resetActivity = () => {
+  if (activityAutoPlaySetting.value !== 0) {
+    return ElMessage.error({
+      message: '请暂停自动演示或等待演示完成'
+    })
+  }
   sortedActivityData.value = []
   selectedActivityData.value = []
   isCalFinished.value = false
