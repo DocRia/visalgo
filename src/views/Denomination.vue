@@ -92,7 +92,7 @@
           />
         </el-row>
         <el-row class="flex-line-center">
-          <el-button v-if="!isAddFinished" @click="addDeno">添加面额</el-button>
+          <el-button type="info" plain v-if="!isAddFinished" @click="addDeno">添加面额</el-button>
           <el-button
             type="primary"
             plain
@@ -102,6 +102,8 @@
           >
           <el-button
             class="top-bottom-margin"
+            type="info"
+            plain
             v-if="isAddFinished"
             @click="resetDeno"
             >重设面额</el-button

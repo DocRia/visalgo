@@ -84,7 +84,13 @@
           />
         </el-row>
         <el-row class="flex-line-center">
-          <el-button v-if="!isAddFinished" @click="addMatrix">添加维度</el-button>
+          <el-button
+            type="info"
+            plain
+            v-if="!isAddFinished"
+            @click="addMatrix"
+            >添加维度</el-button
+          >
           <el-button
             type="primary"
             plain
@@ -94,6 +100,8 @@
           >
           <el-button
             class="top-bottom-margin"
+            type="info"
+            plain
             v-if="isAddFinished"
             @click="resetMatrix"
             >重设矩阵</el-button

@@ -104,6 +104,8 @@
         </el-row>
         <el-row class="flex-line-center">
           <el-button
+            type="info"
+            plain
             v-if="!isAddFinished"
             @click="addKnapsackItem"
             >添加物品</el-button
@@ -117,6 +119,8 @@
           >
           <el-button
             class="top-bottom-margin"
+            type="info"
+            plain
             v-if="isAddFinished"
             @click="resetKnapsack"
             >重设背包</el-button

@@ -86,6 +86,8 @@
           <div class="activity-button-container top-bottom-margin">
             <el-button
               class="activity-button"
+              type="info"
+              plain
               @click="addActivity"
               >添加活动</el-button
             >
@@ -105,6 +107,8 @@
           </el-table>
           <el-button
             class="top-bottom-margin"
+            type="info"
+            plain
             v-if="isAddFinished"
             @click="resetActivity"
             >重设活动</el-button

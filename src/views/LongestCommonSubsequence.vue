@@ -117,8 +117,10 @@
 
         <el-row class="subsequence-item-container">
           <el-button
-            @click="resetSubsequence"
+            type="info"
+            plain
             v-if="isAddFinished"
+            @click="resetSubsequence"
             >重置字符串</el-button
           >
         </el-row>

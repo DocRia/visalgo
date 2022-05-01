@@ -83,6 +83,8 @@
             <el-row class="horse-input-button" v-if="!isAddFinished">
               <el-button
                 class="horse-button"
+                type="info"
+                plain
                 @click="addHorseA"
                 >添加马匹</el-button
               >
@@ -115,6 +117,8 @@
             <el-row class="horse-input-button" v-if="!isAddFinished">
               <el-button
                 class="horse-button"
+                type="info"
+                plain
                 @click="addHorseB"
                 >添加马匹</el-button
               >
