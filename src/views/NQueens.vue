@@ -61,7 +61,7 @@
         </el-row>
         <el-row>
           <div class="slider">
-            <el-slider v-model="queenNum" show-input :max="10"> </el-slider>
+            <el-slider v-model="queenNum" show-input :disabled="showBoard" :max="10"> </el-slider>
           </div>
           <el-button type="primary" plain class="set-board-button" @click="setBoard" v-if="!showBoard">确认</el-button>
           <el-button type="info" plain class="set-board-button" @click="resetBoard" v-else>重置</el-button>
