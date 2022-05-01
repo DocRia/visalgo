@@ -74,6 +74,12 @@
                 <span>活动安排问题</span>
               </template>
             </el-menu-item>
+            <el-menu-item index="horse-racing">
+              <template #title>
+                <el-icon><files /></el-icon>
+                <span>田忌赛马</span>
+              </template>
+            </el-menu-item>
           </el-sub-menu>
 
           <el-sub-menu index="divide-and-conquer">
