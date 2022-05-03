@@ -358,6 +358,9 @@ const subsequencePause = () => {
       :deep(.el-table__empty-block) {
         display: none;
       }
+      :deep(.el-scrollbar__wrap--hidden-default) {
+        display: none;
+      }
     }
   }
 }
