@@ -15,5 +15,5 @@ html, body, #app {
 }
 
 .warning-row {
-  --el-table-tr-bg-color: var(--el-color-warning-lighter) !important;
+  --el-table-tr-bg-color: oldlace;
 }
