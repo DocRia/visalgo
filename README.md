@@ -20,5 +20,7 @@ npm run build
 npm run lint
 ```
 
-=======
-Algorithm Visualizer
+### Automatic deployment
+```
+sh deploy.sh
+```
